@@ -1,24 +1,65 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+// import React from 'react';
+// import logo from './logo.svg';
+import "./App.css";
+import { initializeIcons } from "@fluentui/react/lib/Icons";
+import { makeStyles, mergeClasses } from "@fluentui/react-components";
+import Fabric from "./components/fabric";
+import Treeview from "./components/Treeview";
+import TreeAbsorbist from "./components/TreeAbsorbist";
+import AntTree from "./components/AntTree";
+
+import '@fluentui/react/dist/css/fabric.min.css';
+import 'antd/dist/reset.css';
+import DayPickerComponent from "./components/DayPicker";
+
+initializeIcons();
+
+const styles = makeStyles({
+  title: {
+    color: "red",
+    fontSize: "32px",
+  },
+  bold: {
+    fontWeight: "bold",
+    color: "green",
+  },
+  treeContainer: {
+    width: "50rem",
+    // textAlign: "left",
+  },
+});
 
 function App() {
+  const classes = styles();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="">
+      <h1 className={mergeClasses(classes.title, classes.bold)}>
+        Hello React FLUENT
+      </h1>
+      {process.env.NODE_ENV}
+
+      <hr />
+      <Fabric />
+      {/* <FabricReact/> */}
+
+      <div style={{margin: "0 auto"}} className={classes.treeContainer}>
+        <Treeview />
+      </div>
+
+      <div style={{margin: "0 auto"}} className={classes.treeContainer}>
+        {/* <TreeAbsorbist /> */}
+      </div>
+
+      <hr/>
+      <div>
+       <hr/>
+        <DayPickerComponent />
+        <hr />
+      </div>
+      <div>
+        <AntTree />
+      </div>
     </div>
   );
 }
