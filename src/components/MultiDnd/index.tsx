@@ -146,8 +146,6 @@ function MultiDnd() {
     };
   };
 
-  const containerStyle = { display: "flex" };
-
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -156,7 +154,7 @@ function MultiDnd() {
           onDragEnd={handleDragEnd}
           onDragOver={handleDragOver}
         >
-          <div style={containerStyle}>
+          <div>
             {Object.keys(items).map((group) => (
               <Droppable id={group} items={(items as any)[group]} key={group} />
             ))}
@@ -174,6 +172,14 @@ function MultiDnd() {
           ))}
         </div>
       </div>
+      {/* <div className="flex-container">
+        <div className="grid-item">Item 1</div>
+        <div className="grid-item">Item 2</div>
+        <div className="grid-item">Item 3</div>
+        <div className="grid-item">Item 4</div>
+        <div className="grid-item">Item 5</div>
+        <div className="grid-item">Item 6</div>
+    </div> */}
     </>
   );
 }

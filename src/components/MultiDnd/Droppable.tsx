@@ -48,7 +48,7 @@ const Droppable = ({ id, items }: {id: string, items: DNDDataType[]}) => {
 
   return (
     <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
-      <div ref={setNodeRef} style={droppableStyle}>
+      <div ref={setNodeRef} className="flex-container">
         {items.map((item) => (
           <SortableItem key={item.id} id={item.id} item={item} />
         ))}

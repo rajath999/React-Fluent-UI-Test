@@ -36,3 +36,26 @@
     transform: rotate(360deg);
   }
 }
+
+//-----------------
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Grid items will automatically adjust based on available space */
+  gap: 10px; /* Spacing between grid items */
+}
+
+.grid-item {
+  background-color: #3498db; /* Blue background color */
+  color: white; /* White text color */
+  padding: 20px;
+  text-align: center;
+  width: 10rem;
+  margin: 0.3rem;
+}
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 5rem;
+  border: 1px solid black;
+}
