@@ -11,6 +11,7 @@ import AntTree from "./components/AntTree";
 import '@fluentui/react/dist/css/fabric.min.css';
 import 'antd/dist/reset.css';
 import DayPickerComponent from "./components/DayPicker";
+import MultiDnd from "./components/MultiDnd";
 
 initializeIcons();
 
@@ -49,6 +50,10 @@ function App() {
 
       <div style={{margin: "0 auto"}} className={classes.treeContainer}>
         {/* <TreeAbsorbist /> */}
+      </div>
+
+      <div>
+        <MultiDnd />
       </div>
 
       <hr/>
