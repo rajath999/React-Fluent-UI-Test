@@ -67,19 +67,20 @@ function MultiDnd() {
         const activeIndex = active.data.current?.sortable.index;
         const overIndex = over.data.current?.sortable.index || 0;
 
-        let item = items.selected.find(i => i.id === active.id)
+        let item = items.selected.find((i) => i.id === active.id);
         if (!item) {
-            item = items.additional.find(i => i.id === active.id)
+          item = items.additional.find((i) => i.id === active.id);
         }
-
-        return moveBetweenContainers(
-          items,
-          activeContainer,
-          activeIndex,
-          overContainer,
-          overIndex,
-          item// active.id
-        );
+        if (item)
+          return moveBetweenContainers(
+            items,
+            activeContainer,
+            activeIndex,
+            overContainer,
+            overIndex,
+            item // active.id
+          );
+        else return { additional: [], selected: [] };
       });
     }
   };
@@ -108,14 +109,20 @@ function MultiDnd() {
             ),
           };
         } else {
-          newItems = moveBetweenContainers(
-            items,
-            activeContainer,
-            activeIndex,
-            overContainer,
-            overIndex,
-            active.id
-          );
+          let item = items.selected.find((i) => i.id === active.id);
+          if (!item) {
+            item = items.additional.find((i) => i.id === active.id);
+          }
+          if (item)
+            newItems = moveBetweenContainers(
+              items,
+              activeContainer,
+              activeIndex,
+              overContainer,
+              overIndex,
+              item //active.id
+            );
+          else return { additional: [], selected: [] };
         }
 
         return newItems;
@@ -124,14 +131,14 @@ function MultiDnd() {
   };
 
   const moveBetweenContainers = (
-    items: any,
-    activeContainer: any,
-    activeIndex: any,
-    overContainer: any,
-    overIndex: any,
-    item: any
+    items: MultiDndItemsState,
+    activeContainer: keyof MultiDndItemsState,
+    activeIndex: number,
+    overContainer: keyof MultiDndItemsState,
+    overIndex: number,
+    item: DNDDataType
   ) => {
-    console.log("ITEM : ", item )
+    console.log("ITEM : ", item);
     return {
       ...items,
       [activeContainer]: removeAtIndex(items[activeContainer], activeIndex),
