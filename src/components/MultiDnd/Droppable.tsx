@@ -2,8 +2,14 @@ import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useDroppable } from "@dnd-kit/core";
+import { DNDDataType } from "../../types";
 
-const SortableItem = (props: any) => {
+type SortableItemType = {
+    id: string,
+    item: DNDDataType,
+}
+
+const SortableItem = (props: SortableItemType) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: props.id });
 
@@ -25,12 +31,12 @@ const SortableItem = (props: any) => {
 
   return (
     <div style={itemStyle} ref={setNodeRef} {...attributes} {...listeners}>
-      Item {props.id}
+      {props.item.name}
     </div>
   );
 };
 
-const Droppable = ({ id, items }: any) => {
+const Droppable = ({ id, items }: {id: string, items: DNDDataType[]}) => {
   const { setNodeRef } = useDroppable({ id });
 
   const droppableStyle = {
@@ -43,8 +49,8 @@ const Droppable = ({ id, items }: any) => {
   return (
     <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
       <div ref={setNodeRef} style={droppableStyle}>
-        {items.map((item: any) => (
-          <SortableItem key={item} id={item} />
+        {items.map((item) => (
+          <SortableItem key={item.id} id={item.id} item={item} />
         ))}
       </div>
     </SortableContext>

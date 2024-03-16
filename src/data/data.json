@@ -1,0 +1,51 @@
+[
+  {
+    "id": "101",
+    "name": "Raviteja",
+    "isSelected": true,
+    "orderPreference": 1,
+    "isFixed": true
+  },
+  {
+    "id": "102",
+    "name": "Raviteja",
+    "isSelected": true,
+    "orderPreference": 1,
+    "isFixed": true
+  },
+  {
+    "id": "103",
+    "name": "Jason",
+    "isSelected": false,
+    "orderPreference": 1,
+    "isFixed": false
+  },
+  {
+    "id": "104",
+    "name": "Keith",
+    "isSelected": true,
+    "orderPreference": 1,
+    "isFixed": true
+  },
+  {
+    "id": "105",
+    "name": "Mark",
+    "isSelected": false,
+    "orderPreference": 1,
+    "isFixed": false
+  },
+  {
+    "id": "106",
+    "name": "Raju",
+    "isSelected": true,
+    "orderPreference": 1,
+    "isFixed": false
+  },
+  {
+    "id": "107",
+    "name": "Kiran",
+    "isSelected": true,
+    "orderPreference": 1,
+    "isFixed": true
+  }
+]

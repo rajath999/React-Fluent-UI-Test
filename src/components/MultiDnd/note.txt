@@ -6,7 +6,7 @@ import {
   KeyboardSensor,
   PointerSensor,
   useSensor,
-  useSensors,
+  useSensors
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
@@ -15,36 +15,30 @@ import Droppable from "./Droppable";
 import jsonData from "../../data/data.json";
 import { DNDDataType } from "../../types";
 
-type MultiDndItemsState = {
-  selected: DNDDataType[];
-  additional: DNDDataType[];
-};
+const SELECTED="selected"
+const ADDITIONAL="additional"
 
 function MultiDnd() {
-  const [items, setItems] = useState<MultiDndItemsState>({
-    selected: [],
-    additional: [],
-  });
+  const [selected, setSelected] = useState<DNDDataType[]>();
+  const [additional, setAdditional] = useState<DNDDataType[]>();
 
   useEffect(() => {
-    const selected: DNDDataType[] = [],
-      additional: DNDDataType[] = [];
-
-    jsonData.forEach((e) => {
-      if (e.isSelected) {
-        selected.push(e);
-      } else {
-        additional.push(e);
-      }
+    const selected:DNDDataType[] = [], additional:DNDDataType[] = [];
+    jsonData.forEach(e => {
+        if (e.isSelected) {
+            selected.push(e);
+        } else {
+            additional.push(e);
+        }
     });
-
-    setItems({ selected, additional });
+    setSelected(() => selected);
+    setAdditional(() => additional);
   }, []);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
+      coordinateGetter: sortableKeyboardCoordinates
     })
   );
 
@@ -67,18 +61,13 @@ function MultiDnd() {
         const activeIndex = active.data.current?.sortable.index;
         const overIndex = over.data.current?.sortable.index || 0;
 
-        let item = items.selected.find(i => i.id === active.id)
-        if (!item) {
-            item = items.additional.find(i => i.id === active.id)
-        }
-
         return moveBetweenContainers(
           items,
           activeContainer,
           activeIndex,
           overContainer,
           overIndex,
-          item// active.id
+          active.id
         );
       });
     }
@@ -98,14 +87,14 @@ function MultiDnd() {
       setItems((items) => {
         let newItems;
         if (activeContainer === overContainer) {
-          const items_ = items as any;
+            const items_ = items as any;
           newItems = {
             ...items,
             [overContainer]: arrayMove(
               items_[overContainer],
               activeIndex,
               overIndex
-            ),
+            )
           };
         } else {
           newItems = moveBetweenContainers(
@@ -131,43 +120,29 @@ function MultiDnd() {
     overIndex: any,
     item: any
   ) => {
-    console.log("ITEM : ", item )
     return {
       ...items,
       [activeContainer]: removeAtIndex(items[activeContainer], activeIndex),
-      [overContainer]: insertAtIndex(items[overContainer], overIndex, item),
+      [overContainer]: insertAtIndex(items[overContainer], overIndex, item)
     };
   };
 
   const containerStyle = { display: "flex" };
 
   return (
-    <>
-      <div style={{ display: "flex" }}>
-        <DndContext
-          sensors={sensors}
-          onDragEnd={handleDragEnd}
-          onDragOver={handleDragOver}
-        >
-          <div style={containerStyle}>
-            {Object.keys(items).map((group) => (
-              <Droppable id={group} items={(items as any)[group]} key={group} />
-            ))}
-          </div>
-        </DndContext>
-
-        <div style={{ padding: "0 5rem" }}>
-          {items.selected.map((d) => (
-            <h5>{d.name}</h5>
-          ))}
-        </div>
-        <div>
-          {items.additional.map((d) => (
-            <h5>{d.name}</h5>
-          ))}
-        </div>
+    <DndContext
+      sensors={sensors}
+      onDragEnd={handleDragEnd}
+      onDragOver={handleDragOver}
+    >
+      <div style={containerStyle}>
+        {/* {Object.keys(items).map((group) => (
+            <Droppable id={group} items={(items as any)[group]} key={group} />
+        ))} */}
+         <Droppable id={SELECTED} items={selected} key={SELECTED} />
+         <Droppable id={ADDITIONAL} items={additional} key={ADDITIONAL} />
       </div>
-    </>
+    </DndContext>
   );
 }
 
