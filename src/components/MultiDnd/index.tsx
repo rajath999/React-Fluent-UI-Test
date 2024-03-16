@@ -5,6 +5,7 @@ import {
   DragOverEvent,
   KeyboardSensor,
   PointerSensor,
+  closestCorners,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -21,10 +22,12 @@ type MultiDndItemsState = {
 };
 
 function MultiDnd() {
-  const [items, setItems] = useState<MultiDndItemsState>({
-    selected: [],
-    additional: [],
-  });
+  // const [items, setItems] = useState<MultiDndItemsState>({
+  //   selected: [],
+  //   additional: [],
+  // });
+  const [selectedColumns, setSelectedColumns] = useState<DNDDataType[]>([]);
+  const [additonalColumns, setAdditionalColumns] = useState<DNDDataType[]>([]);
 
   useEffect(() => {
     const selected: DNDDataType[] = [],
@@ -38,7 +41,9 @@ function MultiDnd() {
       }
     });
 
-    setItems({ selected, additional });
+    // setItems({ selected, additional });
+    setAdditionalColumns(additional);
+    setSelectedColumns(selected);
   }, []);
 
   const sensors = useSensors(
@@ -63,25 +68,31 @@ function MultiDnd() {
     }
 
     if (activeContainer !== overContainer) {
-      setItems((items) => {
+     
         const activeIndex = active.data.current?.sortable.index;
         const overIndex = over.data.current?.sortable.index || 0;
 
-        let item = items.selected.find((i) => i.id === active.id);
+        let item = selectedColumns.find((i) => i.id === active.id);
         if (!item) {
-          item = items.additional.find((i) => i.id === active.id);
+          item = additonalColumns.find((i) => i.id === active.id);
         }
-        if (item)
-          return moveBetweenContainers(
-            items,
+        if (item) {
+          const res = moveBetweenContainers(
+            {
+              selected: selectedColumns,
+              additional: additonalColumns,
+            },
             activeContainer,
             activeIndex,
             overContainer,
             overIndex,
             item // active.id
           );
-        else return { additional: [], selected: [] };
-      });
+
+          setSelectedColumns(res.selected)
+          setAdditionalColumns(res.additional)
+
+        }
     }
   };
 
@@ -96,37 +107,56 @@ function MultiDnd() {
       const activeIndex = active.data.current?.sortable.index;
       const overIndex = over.data.current?.sortable.index || 0;
 
-      setItems((items) => {
         let newItems;
         if (activeContainer === overContainer) {
-          const items_ = items as any;
-          newItems = {
-            ...items,
-            [overContainer]: arrayMove(
-              items_[overContainer],
+          console.log("active ", activeContainer, " over ", overContainer)
+          // const items_ = items as any;
+          // newItems = {
+          //   ...items,
+          //   [overContainer]: arrayMove(
+          //     items_[overContainer],
+          //     activeIndex,
+          //     overIndex
+          //   ),
+          // };
+          if (overContainer === "selected") {
+            newItems = { selectedColumns: arrayMove(
+              selectedColumns,
               activeIndex,
               overIndex
-            ),
-          };
-        } else {
-          let item = items.selected.find((i) => i.id === active.id);
-          if (!item) {
-            item = items.additional.find((i) => i.id === active.id);
+            ), additonalColumns}
           }
-          if (item)
+          if (overContainer === "additional") {
+            newItems = { additonalColumns: arrayMove(
+              additonalColumns,
+              activeIndex,
+              overIndex
+            ), selectedColumns}
+          }
+          setSelectedColumns(newItems?.selectedColumns as DNDDataType[]);
+          setAdditionalColumns(newItems?.additonalColumns as DNDDataType[]);
+        } else {
+          let item = selectedColumns.find((i) => i.id === active.id);
+          if (!item) {
+            item = additonalColumns.find((i) => i.id === active.id);
+          }
+          if (item) {
             newItems = moveBetweenContainers(
-              items,
+              {
+                additional: additonalColumns,
+                selected: selectedColumns,
+              },
               activeContainer,
               activeIndex,
               overContainer,
               overIndex,
               item //active.id
             );
-          else return { additional: [], selected: [] };
+            setSelectedColumns(newItems.selected);
+            setAdditionalColumns(newItems.additional);
+          }
         }
 
-        return newItems;
-      });
     }
   };
 
@@ -153,20 +183,21 @@ function MultiDnd() {
           sensors={sensors}
           onDragEnd={handleDragEnd}
           onDragOver={handleDragOver}
+          collisionDetection={closestCorners}
         >
           <div>
-              <Droppable id={"selected"} items={items.selected} key={"selected"} />
-              <Droppable id={"additional"} items={items.additional} key={"additional"} />
+              <Droppable id={"selected"} items={selectedColumns} key={"selected"} />
+              <Droppable id={"additional"} items={additonalColumns} key={"additional"} />
           </div>
         </DndContext>
 
         <div style={{ padding: "0 5rem" }}>
-          {items.selected.map((d) => (
+          {selectedColumns.map((d) => (
             <h5>{d.name}</h5>
           ))}
         </div>
         <div>
-          {items.additional.map((d) => (
+          {additonalColumns.map((d) => (
             <h5>{d.name}</h5>
           ))}
         </div>
