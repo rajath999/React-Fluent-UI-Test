@@ -155,9 +155,8 @@ function MultiDnd() {
           onDragOver={handleDragOver}
         >
           <div>
-            {Object.keys(items).map((group) => (
-              <Droppable id={group} items={(items as any)[group]} key={group} />
-            ))}
+              <Droppable id={"selected"} items={items.selected} key={"selected"} />
+              <Droppable id={"additional"} items={items.additional} key={"additional"} />
           </div>
         </DndContext>
 
