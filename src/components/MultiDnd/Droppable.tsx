@@ -30,8 +30,8 @@ const SortableItem = (props: SortableItemType) => {
   };
 
   return (
-    <div style={itemStyle} ref={setNodeRef} {...attributes} {...listeners}>
-      {props.item.name}
+    <div style={itemStyle} ref={setNodeRef} {...attributes} {...listeners} data-item={props.item}>
+      {props.item.name} {props.item.isFixed && <span className="circle"></span>}
     </div>
   );
 };
@@ -48,7 +48,7 @@ const Droppable = ({ id, items }: {id: string, items: DNDDataType[]}) => {
 
   return (
     <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
-      <div ref={setNodeRef} className="flex-container">
+      <div ref={setNodeRef} className="flex-container" data-value={"ITEM-X"}>
         {items.map((item) => (
           <SortableItem key={item.id} id={item.id} item={item} />
         ))}

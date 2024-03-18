@@ -68,31 +68,33 @@ function MultiDnd() {
     }
 
     if (activeContainer !== overContainer) {
-     
-        const activeIndex = active.data.current?.sortable.index;
-        const overIndex = over.data.current?.sortable.index || 0;
+      const activeIndex = active.data.current?.sortable.index;
+      const overIndex = over.data.current?.sortable.index || 0;
 
-        let item = selectedColumns.find((i) => i.id === active.id);
-        if (!item) {
-          item = additonalColumns.find((i) => i.id === active.id);
-        }
-        if (item) {
-          const res = moveBetweenContainers(
-            {
-              selected: selectedColumns,
-              additional: additonalColumns,
-            },
-            activeContainer,
-            activeIndex,
-            overContainer,
-            overIndex,
-            item // active.id
-          );
+      let item = selectedColumns.find((i) => i.id === active.id);
+      if (!item) {
+        item = additonalColumns.find((i) => i.id === active.id);
+      }
+      // Dont move the items if the item is fixed
+      if (item?.isFixed) {
+        return false;
+      }
+      if (item) {
+        const res = moveBetweenContainers(
+          {
+            selected: selectedColumns,
+            additional: additonalColumns,
+          },
+          activeContainer,
+          activeIndex,
+          overContainer,
+          overIndex,
+          item // active.id
+        );
 
-          setSelectedColumns(res.selected)
-          setAdditionalColumns(res.additional)
-
-        }
+        setSelectedColumns(res.selected);
+        setAdditionalColumns(res.additional);
+      }
     }
   };
 
@@ -107,56 +109,50 @@ function MultiDnd() {
       const activeIndex = active.data.current?.sortable.index;
       const overIndex = over.data.current?.sortable.index || 0;
 
-        let newItems;
-        if (activeContainer === overContainer) {
-          console.log("active ", activeContainer, " over ", overContainer)
-          // const items_ = items as any;
-          // newItems = {
-          //   ...items,
-          //   [overContainer]: arrayMove(
-          //     items_[overContainer],
-          //     activeIndex,
-          //     overIndex
-          //   ),
-          // };
-          if (overContainer === "selected") {
-            newItems = { selectedColumns: arrayMove(
-              selectedColumns,
-              activeIndex,
-              overIndex
-            ), additonalColumns}
-          }
-          if (overContainer === "additional") {
-            newItems = { additonalColumns: arrayMove(
+      let newItems;
+      if (activeContainer === overContainer) {
+        if (overContainer === "selected" || activeContainer === "selected") {
+          newItems = {
+            selectedColumns: arrayMove(selectedColumns, activeIndex, overIndex),
+            additonalColumns,
+          };
+        }
+        if (
+          overContainer === "additional" ||
+          activeContainer === "additional"
+        ) {
+          newItems = {
+            additonalColumns: arrayMove(
               additonalColumns,
               activeIndex,
               overIndex
-            ), selectedColumns}
-          }
-          setSelectedColumns(newItems?.selectedColumns as DNDDataType[]);
-          setAdditionalColumns(newItems?.additonalColumns as DNDDataType[]);
-        } else {
-          let item = selectedColumns.find((i) => i.id === active.id);
-          if (!item) {
-            item = additonalColumns.find((i) => i.id === active.id);
-          }
-          if (item) {
-            newItems = moveBetweenContainers(
-              {
-                additional: additonalColumns,
-                selected: selectedColumns,
-              },
-              activeContainer,
-              activeIndex,
-              overContainer,
-              overIndex,
-              item //active.id
-            );
-            setSelectedColumns(newItems.selected);
-            setAdditionalColumns(newItems.additional);
-          }
+            ),
+            selectedColumns,
+          };
         }
-
+        setSelectedColumns(newItems?.selectedColumns as DNDDataType[]);
+        setAdditionalColumns(newItems?.additonalColumns as DNDDataType[]);
+      } else {
+        // let item = selectedColumns.find((i) => i.id === active.id);
+        // if (!item) {
+        //   item = additonalColumns.find((i) => i.id === active.id);
+        // }
+        // if (item) {
+        //   newItems = moveBetweenContainers(
+        //     {
+        //       additional: additonalColumns,
+        //       selected: selectedColumns,
+        //     },
+        //     activeContainer,
+        //     activeIndex,
+        //     overContainer,
+        //     overIndex,
+        //     item //active.id
+        //   );
+        //   setSelectedColumns(newItems.selected);
+        //   setAdditionalColumns(newItems.additional);
+        // }
+      }
     }
   };
 
@@ -183,11 +179,19 @@ function MultiDnd() {
           sensors={sensors}
           onDragEnd={handleDragEnd}
           onDragOver={handleDragOver}
-          collisionDetection={closestCorners}
+          collisionDetection={closestCorners} 
         >
           <div>
-              <Droppable id={"selected"} items={selectedColumns} key={"selected"} />
-              <Droppable id={"additional"} items={additonalColumns} key={"additional"} />
+            <Droppable
+              id={"selected"}
+              items={selectedColumns}
+              key={"selected"}
+            />
+            <Droppable
+              id={"additional"}
+              items={additonalColumns}
+              key={"additional"}
+            />
           </div>
         </DndContext>
 

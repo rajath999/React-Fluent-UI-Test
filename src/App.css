@@ -59,3 +59,21 @@
   min-width: 5rem;
   border: 1px solid black;
 }
+
+.circle {
+  width: 5px;
+  height: 5px;
+  background-color: red;
+  border-radius: 10px;
+  box-shadow: 0 0 3px 3px rgba(255, 0, 0, 0.2);
+  animation: pulse 1.5s infinite alternate; /* Glowing animation */
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 3px 3px rgba(255, 0, 0, 0.7); /* Start glowing */
+  }
+  100% {
+    box-shadow: 0 0 3px 3px rgba(255, 0, 0, 0.2); /* End glowing */
+  }
+}
