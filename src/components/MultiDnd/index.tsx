@@ -49,13 +49,6 @@ function MultiDnd() {
     setSelectedColumns(selected);
   }, []);
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
   const handleDragOver = ({ over, active }: DragOverEvent) => {
     const overId = over?.id;
 
