@@ -3,6 +3,9 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useDroppable } from "@dnd-kit/core";
 import { DNDDataType } from "../../types";
+import { Checkbox } from "antd";
+import type { CheckboxProps } from "antd";
+import { ChangeEvent, useState } from "react";
 
 type SortableItemType = {
     id: string,
@@ -11,7 +14,9 @@ type SortableItemType = {
 
 const SortableItem = (props: SortableItemType) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: props.id });
+    useSortable({ id: props.id, data: props.item });
+
+   const [isChecked, setCheck] = useState(true);
 
   const itemStyle: any = {
     transform: CSS.Transform.toString(transform),
@@ -29,9 +34,15 @@ const SortableItem = (props: SortableItemType) => {
     boxSizing: "border-box",
   };
 
+  // const onCheckboxClicked: CheckboxProps["onChange"]  = (ev: ChangeEvent<HTMLInputElement>, data: CheckboxOnChangeData)=> {
+  //   console.log("Checkbox click ", e);
+  //   setCheck(e.target.checked)
+  // }
+
   return (
     <div style={itemStyle} ref={setNodeRef} {...attributes} {...listeners} data-item={props.item}>
-      {props.item.name} {props.item.isFixed && <span className="circle"></span>}
+      <Checkbox onChange={(e) => console.log("EVENT : ", e.target.checked)} checked={isChecked}>{props.item.name}</Checkbox>
+       {props.item.isFixed && <span className="circle"></span>}
     </div>
   );
 };

@@ -4,7 +4,9 @@ import {
   DragEndEvent,
   DragOverEvent,
   KeyboardSensor,
+  MouseSensor,
   PointerSensor,
+  TouchSensor,
   closestCorners,
   useSensor,
   useSensors,
@@ -15,6 +17,7 @@ import { arrayMove, insertAtIndex, removeAtIndex } from "./utils";
 import Droppable from "./Droppable";
 import jsonData from "../../data/data.json";
 import { DNDDataType } from "../../types";
+import { Checkbox } from "antd";
 
 type MultiDndItemsState = {
   selected: DNDDataType[];
@@ -172,11 +175,28 @@ function MultiDnd() {
     };
   };
 
+  const sensors_new = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 200,
+        tolerance: 6,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
   return (
     <>
       <div style={{ display: "flex" }}>
         <DndContext
-          sensors={sensors}
+          sensors={sensors_new}
           onDragEnd={handleDragEnd}
           onDragOver={handleDragOver}
           collisionDetection={closestCorners} 
@@ -185,24 +205,22 @@ function MultiDnd() {
             <Droppable
               id={"selected"}
               items={selectedColumns}
-              key={"selected"}
             />
             <Droppable
               id={"additional"}
               items={additonalColumns}
-              key={"additional"}
             />
           </div>
         </DndContext>
 
         <div style={{ padding: "0 5rem" }}>
           {selectedColumns.map((d) => (
-            <h5>{d.name}</h5>
+            <h5 key={d.id}>{d.name}</h5>
           ))}
         </div>
         <div>
           {additonalColumns.map((d) => (
-            <h5>{d.name}</h5>
+            <h5 key={d.id}>{d.name}</h5>
           ))}
         </div>
       </div>
@@ -214,6 +232,7 @@ function MultiDnd() {
         <div className="grid-item">Item 5</div>
         <div className="grid-item">Item 6</div>
     </div> */}
+    <Checkbox >Accept terms</Checkbox>
     </>
   );
 }
