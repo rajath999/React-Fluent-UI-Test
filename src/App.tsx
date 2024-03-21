@@ -8,11 +8,18 @@ import Treeview from "./components/Treeview";
 import TreeAbsorbist from "./components/TreeAbsorbist";
 import AntTree from "./components/AntTree";
 
-import '@fluentui/react/dist/css/fabric.min.css';
-import 'antd/dist/reset.css';
+import "@fluentui/react/dist/css/fabric.min.css";
+import "antd/dist/reset.css";
 import DayPickerComponent from "./components/DayPicker";
 import MultiDnd from "./components/MultiDnd";
-import Dropdown from "./components/AndD/Dropdown";
+
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+} from "react-router-dom";
+import LayoutComponent from "./components/Layout/LayoutComponent";
+import DropDownAntD from "./components/AndD/Dropdown";
 
 initializeIcons();
 
@@ -32,45 +39,19 @@ const styles = makeStyles({
 });
 
 function App() {
-  const classes = styles();
-
   return (
-    <div className="">
-      <h1 className={mergeClasses(classes.title, classes.bold)}>
-        Hello React FLUENT
-      </h1>
-      {process.env.NODE_ENV}
-
-      <hr />
-      <Fabric />
-      {/* <FabricReact/> */}
-
-      <div style={{margin: "0 auto"}} className={classes.treeContainer}>
-        <Treeview />
-      </div>
-
-      <div style={{margin: "0 auto"}} className={classes.treeContainer}>
-        {/* <TreeAbsorbist /> */}
-      </div>
-
-      <div>
-        <MultiDnd />
-      </div>
-
-      <div>
-        <Dropdown />
-      </div>
-
-      <hr/>
-      <div>
-       <hr/>
-        <DayPickerComponent />
-        <hr />
-      </div>
-      <div>
-        <AntTree />
-      </div>
-    </div>
+    <BrowserRouter>
+      <LayoutComponent>
+        <Routes>
+          <Route path="/" element={<DropDownAntD />} />
+          <Route path="/day-picker" element={<DayPickerComponent />} />
+          <Route path="/ant-tree" element={<AntTree />} />
+          <Route path="/fabric" element={<Fabric />} />
+          <Route path="/multi-dnd" element={<MultiDnd />} />
+          <Route path="/tree-view" element={<Treeview />} />
+        </Routes>
+      </LayoutComponent>
+    </BrowserRouter>
   );
 }
 
