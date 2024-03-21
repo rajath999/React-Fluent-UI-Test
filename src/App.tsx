@@ -12,6 +12,7 @@ import '@fluentui/react/dist/css/fabric.min.css';
 import 'antd/dist/reset.css';
 import DayPickerComponent from "./components/DayPicker";
 import MultiDnd from "./components/MultiDnd";
+import Dropdown from "./components/AndD/Dropdown";
 
 initializeIcons();
 
@@ -54,6 +55,10 @@ function App() {
 
       <div>
         <MultiDnd />
+      </div>
+
+      <div>
+        <Dropdown />
       </div>
 
       <hr/>
