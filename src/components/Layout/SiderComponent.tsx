@@ -33,6 +33,10 @@ const paths = {
         path: 'tree-view',
         name: 'tree-view',
     },
+    '7': {
+        path: 'worker-tree',
+        name: 'antd-tree',
+    },
 }
 
 export default function SiderComponent({ collapsed }: { collapsed: boolean }) {

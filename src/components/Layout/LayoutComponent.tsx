@@ -15,7 +15,7 @@ export default function LayoutComponent(props: any) {
     } = theme.useToken();
 
     return (
-        <Layout>
+        <Layout className="main-layout">
             <SiderComponent collapsed={collapsed} />
             <Layout>
                 <Header style={{ padding: 0, background: colorBgContainer }}>
