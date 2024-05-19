@@ -37,6 +37,10 @@ const paths = {
         path: 'worker-tree',
         name: 'antd-tree',
     },
+    '8': {
+        path: 'list-products',
+        name: 'List Products',
+    },
 }
 
 export default function SiderComponent({ collapsed }: { collapsed: boolean }) {

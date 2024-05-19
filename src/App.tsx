@@ -21,6 +21,7 @@ import {
 import LayoutComponent from "./components/Layout/LayoutComponent";
 import DropDownAntD from "./components/AndD/Dropdown";
 import AntDTree from "./components/antdtree";
+import ListProducts from "./components/Products/ListProducts";
 
 initializeIcons();
 
@@ -51,6 +52,7 @@ function App() {
           <Route path="/multi-dnd" element={<MultiDnd />} />
           <Route path="/tree-view" element={<Treeview />} />
           <Route path="/worker-tree" element={<AntDTree />} />
+          <Route path="/list-products" element={<ListProducts />}/>
         </Routes>
       </LayoutComponent>
     </BrowserRouter>
