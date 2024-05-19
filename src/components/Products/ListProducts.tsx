@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css'; // Ensure this file is imported for styling
+import { useDispatch, useSelector } from 'react-redux';
+import { AppState } from '../../redux-store';
+import { fetchProducts } from '../../redux-store/actions/productActions';
 
 export interface Product {
     userId: number;
@@ -19,19 +22,12 @@ const ProductCard: React.FC<Product> = ({ userId, id, title, body }) => {
 }
 
 const ListProducts: React.FC = () => {
-    const [products, setProducts] = useState<Product[]>([]);
+    const {products} = useSelector((state: AppState) => state.products);
+    const dispatch: any = useDispatch();
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-            if (!response.ok) {
-            throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            setProducts(data);
-          };
-          fetchProducts();
-    }, []);
+        dispatch(fetchProducts());
+    }, [dispatch]);
 
     return (
         <div className="product-list">
