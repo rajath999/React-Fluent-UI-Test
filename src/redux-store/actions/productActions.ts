@@ -21,10 +21,16 @@ interface FetchProductsFailureAction {
     payload: string;
 }
 
+interface FetchProductSuccessAction {
+    type: typeof FETCH_PRODUCT_SUCCESS,
+    payload: Product
+}
+
 export type ProductActionTypes =
     | FetchProductsRequestAction
     | FetchProductsSuccessAction
-    | FetchProductsFailureAction;
+    | FetchProductsFailureAction
+    | FetchProductSuccessAction;
 
 // Action Creators
 export const fetchProductsRequest = (): FetchProductsRequestAction => ({
@@ -60,3 +66,16 @@ export const fetchProducts = () => {
     };
 };
 
+export const FETCH_PRODUCT_SUCCESS = 'FETCH_PRODUCT_SUCCESS';
+export const fetchProductSuccess = (product: Product) => ({
+    type: FETCH_PRODUCT_SUCCESS,
+    payload: product,
+})
+
+export const fetchProduct = (id: number) => {
+    return async (dispatch: Dispatch<any>) => {
+        const response = await fetch("https://jsonplaceholder.typicode.com/posts/"+id);
+        const data:Product = await response.json();
+        dispatch(fetchProductSuccess(data))
+    }
+}
